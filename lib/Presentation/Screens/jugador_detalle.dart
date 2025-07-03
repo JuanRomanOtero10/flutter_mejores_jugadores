@@ -18,11 +18,26 @@ class JugadorDetalle extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(title: Text(jugador.nombre)),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Image.network(
+                jugador.fotoUrl,
+                width: 100,
+                height: 100,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Image.asset(
+                    'jugador.jpg',
+                    width: 100,
+                    height: 100,
+                    fit: BoxFit.cover,
+                  );
+                },
+              ),
+            const SizedBox(height: 16),
             Text(
               'Detalles de ${jugador.nombre}',
               style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
@@ -49,7 +64,7 @@ class JugadorDetalle extends ConsumerWidget {
               'Asistencias: ${jugador.asistencias}',
               style: const TextStyle(fontSize: 16),
             ),
-            const Spacer(),
+            const SizedBox(height: 30),
             Row(
               children: [
                 Expanded(
@@ -72,12 +87,42 @@ class JugadorDetalle extends ConsumerWidget {
                     height: 35,
                     child: ElevatedButton.icon(
                       onPressed: () {
-                        final borrar =
-                            ref.read(mejoresJugadoresProvider).toList();
-                        borrar.remove(jugador);
-                        ref.read(mejoresJugadoresProvider.notifier).state =
-                            borrar;
-                        context.go('/jugadores');
+                        showDialog(
+                          context: context,
+                          builder:
+                              (context) => AlertDialog(
+                                title: const Text("Eliminar"),
+                                content: Text(
+                                  "¿Estás seguro que querés eliminar a ${jugador.nombre}?",
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () => Navigator.pop(context),
+                                    child: const Text("Cancelar"),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      final borrar =ref.read(mejoresJugadoresProvider).toList(); 
+                                      borrar.remove(jugador);
+                                      ref.read(mejoresJugadoresProvider.notifier,).state = borrar;
+                                      Navigator.pop(context);
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                          content: Text("${jugador.nombre} ha sido eliminado."),
+                                          backgroundColor: const Color.fromARGB(255, 46, 49, 238),
+                                          duration: const Duration(seconds: 2),
+                                        ),
+                                      );
+                                      context.go('/jugadores');
+                                    },
+                                    child: const Text(
+                                      "Borrar",
+                                      style: TextStyle(color: Colors.red),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                        );
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,

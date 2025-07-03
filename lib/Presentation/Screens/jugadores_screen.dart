@@ -3,15 +3,12 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:myapp/Presentation/providers.dart';
 
-
-
 class JugadoresScreen extends ConsumerWidget {
   const JugadoresScreen({super.key});
 
   @override
   Widget build(BuildContext context, ref) {
-  final jugadorList = ref.watch(mejoresJugadoresProvider);
-    jugadorList.sort((a, b) => a.posicion.compareTo(b.posicion));
+    final jugadorList = ref.watch(mejoresJugadoresProvider);
     return Scaffold(
       appBar: AppBar(title: const Text("Mejores Jugadores de la Historia")),
       body: ListView.builder(
@@ -24,10 +21,18 @@ class JugadoresScreen extends ConsumerWidget {
             child: ListTile(
               contentPadding: const EdgeInsets.all(8),
               leading: Image.network(
-                jugador.fotoUrl ,
+                jugador.fotoUrl,
                 width: 100,
                 height: 100,
                 fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Image.asset(
+                    'jugador.jpg',
+                    width: 100,
+                    height: 100,
+                    fit: BoxFit.cover,
+                  );
+                },
               ),
               title: Text(jugador.nombre),
               subtitle: Text(
@@ -35,15 +40,14 @@ class JugadoresScreen extends ConsumerWidget {
                 'Goles: ${jugador.goles} · Asistencias: ${jugador.asistencias}',
               ),
               onTap: () {
-                ref.read(jugadorSeleccionadoProvider.notifier).state = jugador; 
+                ref.read(jugadorSeleccionadoProvider.notifier).state = jugador;
                 context.push('/detalle');
               },
             ),
           );
         },
       ),
-      floatingActionButton: 
-      FloatingActionButton(
+      floatingActionButton: FloatingActionButton(
         onPressed: () {
           context.push('/add');
         },

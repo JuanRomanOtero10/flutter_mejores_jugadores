@@ -17,7 +17,6 @@ class AddJugador extends ConsumerWidget {
     TextEditingController nacimiento = TextEditingController();
     TextEditingController fotoUrl = TextEditingController();
     TextEditingController descripcion = TextEditingController();
-    TextEditingController posicion = TextEditingController();
 
 
     return Scaffold(
@@ -118,17 +117,6 @@ class AddJugador extends ConsumerWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 20),
-                  Expanded(
-                    child: TextField(
-                      controller: posicion,
-                      decoration: InputDecoration(
-                        hintText: "Posición",
-                        filled: true,
-                        fillColor: Colors.grey[200],
-                      ),
-                    ),
-                  ),
                 ],
               ),
               const SizedBox(height: 20),
@@ -140,7 +128,6 @@ class AddJugador extends ConsumerWidget {
                       nacimiento.text.isEmpty ||
                       goles.text.isEmpty ||
                       asistencias.text.isEmpty ||
-                      posicion.text.isEmpty ||
                       nacionalidad.text.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
@@ -154,7 +141,6 @@ class AddJugador extends ConsumerWidget {
 
                   final nuevoJugador = Jugador(
                     id: ref.read(mejoresJugadoresProvider.notifier).state.length + 1,
-                    posicion: int.tryParse(posicion.text) ??ref.read(mejoresJugadoresProvider.notifier).state.length,
                     nombre: nombre.text,
                     descripcion: descripcion.text,
                     nacionalidad: nacionalidad.text,
@@ -164,7 +150,7 @@ class AddJugador extends ConsumerWidget {
                     fotoUrl: fotoUrl.text,
                   );
 
-                  final copia = ref.read(mejoresJugadoresProvider);
+                  final copia = ref.read(mejoresJugadoresProvider).toList();
                   copia.add(nuevoJugador);
                   ref.read(mejoresJugadoresProvider.notifier).state = copia;
 
@@ -175,7 +161,6 @@ class AddJugador extends ConsumerWidget {
                   asistencias.clear();
                   fotoUrl.clear();
                   descripcion.clear();
-                  posicion.clear();
 
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(

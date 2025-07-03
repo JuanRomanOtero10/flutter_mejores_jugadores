@@ -20,15 +20,7 @@ class EditarJugador extends ConsumerWidget {
     final asistencias = TextEditingController(text: jugador.asistencias.toString());
     final fotoUrl = TextEditingController(text: jugador.fotoUrl);
     final descripcion = TextEditingController(text: jugador.descripcion);
-    final posicion = TextEditingController(text: jugador.posicion.toString());
 
-
-    InputDecoration inputStyle(String hint) => InputDecoration(
-          hintText: hint,
-          filled: true,
-          fillColor: Colors.grey[200],
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-        );
 
     return Scaffold(
       appBar: AppBar(title: Text('Editar ${jugador.nombre}')),
@@ -41,13 +33,23 @@ class EditarJugador extends ConsumerWidget {
               Text('Foto Url'),
               TextField(
                 controller: fotoUrl,
-                decoration: inputStyle("Foto URL"),
+                decoration:InputDecoration(
+                  labelText:"FotoUrl",
+                  filled: true,
+                  fillColor: Colors.grey[200],
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+              ),
               ),
               const SizedBox(height: 20),
               Text('Descripción'),
               TextField(
                 controller: descripcion,
-                decoration: inputStyle("Descripción"),
+                decoration: InputDecoration(
+                  labelText:"Descripcion",
+                  filled: true,
+                  fillColor: Colors.grey[200],
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+              ),
               ),
               const SizedBox(height: 20),
               Row(
@@ -55,23 +57,27 @@ class EditarJugador extends ConsumerWidget {
                   Expanded(
                     child: TextField(
                       controller: goles,
-                      decoration: inputStyle("Goles"),
                       keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                      labelText:"Goles",
+                      filled: true,
+                      fillColor: Colors.grey[200],
+                       border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                      ),
+
                     ),
                   ),
                   const SizedBox(width: 20),
                   Expanded(
                     child: TextField(
                       controller: asistencias,
-                      decoration: inputStyle("Asistencias"),
                       keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                      labelText:"Asistencias",
+                      filled: true,
+                      fillColor: Colors.grey[200],
+                       border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                     ),
-                  ),
-                  const SizedBox(width: 20),
-                  Expanded(
-                    child: TextField(
-                      controller: posicion,
-                      decoration: inputStyle("Posición"),
                     ),
                   ),
                 ],
@@ -87,11 +93,11 @@ class EditarJugador extends ConsumerWidget {
                         backgroundColor: Color.fromARGB(255, 241, 67, 55),
                       ),
                     );
+                    return; 
                   }
 
                   final actualizado = Jugador(
                     id: jugador.id,
-                    posicion:  int.tryParse(posicion.text) ?? jugador.posicion,
                     nombre: jugador.nombre,
                     descripcion: descripcion.text,
                     nacionalidad: jugador.nacionalidad,
